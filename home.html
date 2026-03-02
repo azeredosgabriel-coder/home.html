@@ -18,14 +18,43 @@
 body{font-family:Segoe UI,system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);padding-top:var(--nav-h)}
 
 :root[data-theme='light']{
-  --bg:#F4F7FB;--panel:rgba(0,0,0,.02);
-  --text:#111827;--muted:#5b6472;
-  --stroke:rgba(17,24,39,.12);--stroke2:rgba(17,24,39,.24);
+  --bg:#E8EDF3;--panel:rgba(0,0,0,.03);
+  --text:#111827;--muted:#374151;
+  --stroke:rgba(17,24,39,.15);--stroke2:rgba(17,24,39,.28);
   --accent:rgba(109,40,217,.95);--accent2:rgba(14,116,144,.95);
 }
-:root[data-theme='light'] .nav{background:rgba(244,247,251,.93)}
-:root[data-theme='light'] .box,:root[data-theme='light'] .card{background:rgba(255,255,255,.75)}
+:root[data-theme='light'] .nav{background:rgba(232,237,243,.96);border-bottom-color:rgba(17,24,39,.12)}
+:root[data-theme='light'] .box,:root[data-theme='light'] .card{background:#fff;border-color:rgba(17,24,39,.1)}
 :root[data-theme='light'] .homeTitleText{background:linear-gradient(135deg,#111827 40%,rgba(109,40,217,.7));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+:root[data-theme='light'] .navBtn{color:rgba(55,65,81,.7)}
+:root[data-theme='light'] .navBtn:hover,:root[data-theme='light'] .navBtn.active{color:#111827}
+:root[data-theme='light'] .tabBtn{background:rgba(0,0,0,.04);border-color:rgba(17,24,39,.1);color:#374151}
+:root[data-theme='light'] .tabBtn.active{background:rgba(109,40,217,.1);border-color:rgba(109,40,217,.4);color:#6D28D9}
+:root[data-theme='light'] .calCell.inM{color:#374151}
+:root[data-theme='light'] .calCell{background:rgba(0,0,0,.02)}
+:root[data-theme='light'] .calCell:hover{background:rgba(0,0,0,.06)}
+:root[data-theme='light'] .pendTask{color:#111827}
+:root[data-theme='light'] .pendCheck{accent-color:#6D28D9}
+:root[data-theme='light'] .bookTitle{color:#111827}
+:root[data-theme='light'] .bookDesc{color:#374151}
+:root[data-theme='light'] .bookAuthor{color:#6D28D9}
+:root[data-theme='light'] .msgLoad{color:#374151}
+:root[data-theme='light'] .readFilterBtn{background:rgba(0,0,0,.04);border-color:rgba(17,24,39,.1);color:#374151}
+:root[data-theme='light'] .readFilterBtn.active{background:rgba(109,40,217,.1);border-color:rgba(109,40,217,.4);color:#6D28D9}
+:root[data-theme='light'] .readSearchInput{background:rgba(0,0,0,.04);border-color:rgba(17,24,39,.12);color:#111827}
+:root[data-theme='light'] .readSearchInput::placeholder{color:#6B7280}
+:root[data-theme='light'] .rsbLabel{color:#374151}
+:root[data-theme='light'] .rsbSub{color:#374151}
+:root[data-theme='light'] .rsbPct{color:#374151}
+:root[data-theme='light'] .hCfgField label{color:#374151}
+:root[data-theme='light'] .habitsConfigHead span{color:#111827}
+:root[data-theme='light'] .habitsTodayTitle{color:#111827}
+:root[data-theme='light'] .hGroupLabel{color:rgba(55,65,81,.55)}
+:root[data-theme='light'] .tsLbl{color:#374151}
+:root[data-theme='light'] .srcLink{color:#374151;opacity:.75}
+:root[data-theme='light'] .pendRow{border-color:rgba(17,24,39,.08)}
+:root[data-theme='light'] .boxHead h3{color:#111827}
+:root[data-theme='light'] .sHead h2{color:#111827}
 
 
 /* ── NAV ── */
@@ -34,7 +63,7 @@ body{font-family:Segoe UI,system-ui,-apple-system,sans-serif;background:var(--bg
   border-bottom:1px solid var(--stroke);display:flex;align-items:center;}
 .navInner{max-width:1200px;margin:auto;padding:0 16px;display:flex;align-items:center;gap:3px;width:100%;overflow-x:auto;scrollbar-width:none}
 .navSpacer{flex:1 1 auto}
-.themeBtn{padding:6px 10px;border-radius:8px;border:1px solid var(--stroke);background:rgba(255,255,255,.04);color:var(--muted);cursor:pointer;font-size:12px;flex-shrink:0}
+.themeBtn{padding:5px 9px;border-radius:8px;border:1px solid var(--stroke);background:rgba(255,255,255,.04);color:var(--muted);cursor:pointer;font-size:15px;flex-shrink:0;line-height:1}
 .themeBtn:hover{color:var(--text);background:rgba(255,255,255,.09)}
 .navInner::-webkit-scrollbar{display:none}
 .navLogo{font-size:15px;font-weight:800;margin-right:14px;flex-shrink:0;
@@ -832,7 +861,7 @@ select.bookEditInput{appearance:none;-webkit-appearance:none;background-color:#0
     <button class="navBtn" onclick="showSection('pc')">PC Gamer</button>
     <button class="navBtn" onclick="showSection('links')">Links</button>
     <span class="navSpacer"></span>
-    <button class="themeBtn" id="theme-toggle-btn" onclick="toggleTheme()" title="Alternar tema">☀️ Claro</button>
+    <button class="themeBtn" id="theme-toggle-btn" onclick="toggleTheme()" title="Alternar tema">☀</button>
   </div>
 </nav>
 
@@ -1479,7 +1508,7 @@ var TEACH_TABS = ['Dinheiro','Negócios','Propósito','Relacionamentos','Saúde'
 /* Abas de leitura com tab names exatos */
 var READ_TABS = [
   {label:'2025 ou Antes', key:'2025', seed:[{"title":"1984","author":"George Orwell","cover":"https://m.media-amazon.com/images/I/61NAx5pd6XL._AC_UF1000,1000_QL80_.jpg","status":"read","pages":336,"category":"Ficção","desc":"Distopia clássica em que um regime totalitário controla a realidade através da linguagem, vigilância permanente e revisão da história. Retrato assustador do poder absoluto e da supressão do pensamento livre."},{"title":"As Armas da Persuasão","author":"Robert Cialdini","cover":"https://m.media-amazon.com/images/I/71mWm5Oq7cL._SL1500_.jpg","status":"read","pages":336,"category":"Psicologia","desc":"Estudo científico dos seis princípios universais de influência — reciprocidade, compromisso, aprovação social, afeição, autoridade e escassez — e como são usados para moldar decisões humanas."},{"title":"A Arte da Sedução","author":"Robert Greene","cover":"https://m.media-amazon.com/images/I/81NZcb3CqTL._UF350,350_QL50_.jpg","status":"read","pages":496,"category":"Psicologia","desc":"Mapeamento dos arquétipos do sedutor e das estratégias de atração ao longo da história, mostrando como a sedução é uma forma de poder social que vai muito além do romance."},{"title":"Sapiens","author":"Yuval Noah Harari","cover":"https://www.lpm.com.br/livros/imagens/sapiens_9788525438393_hd.jpg","status":"read","pages":464,"category":"História","desc":"Panorama radical da história humana, do surgimento do Homo sapiens ao mundo moderno, explorando como mitos compartilhados, dinheiro e impérios moldaram nossa espécie de forma única."},{"title":"A Game of Thrones","author":"George R. R. Martin","cover":"https://m.media-amazon.com/images/I/71Jzezm8CBL.jpg","status":"read","pages":694,"category":"Ficção","desc":"Primeiro volume de uma épica de fantasia política em que famílias nobres guerreiam pelo Trono de Ferro, enquanto uma ameaça sobrenatural avança pelo norte além da grande muralha."},{"title":"A Clash of Kings","author":"George R. R. Martin","cover":"https://m.media-amazon.com/images/I/91c5Z3pXhtL._AC_UF1000,1000_QL80_.jpg","status":"read","pages":768,"category":"Ficção","desc":"Segundo livro de As Crônicas de Gelo e Fogo, em que cinco reis disputam o trono de Westeros simultaneamente, mergulhando os Sete Reinos em guerra civil enquanto a magia retorna ao mundo."},{"title":"A Linguagem Corporal","author":"Allan e Barbara Pease","cover":"https://m.media-amazon.com/images/I/71pruYBcIPL.jpg","status":"read","pages":288,"category":"Psicologia","desc":"Guia prático sobre como gestos, posturas e expressões faciais revelam pensamentos e intenções que as palavras escondem, com aplicações em negociação, sedução e liderança."},{"title":"A Nova Psicologia do Sucesso","author":"Carol S. Dweck","cover":"https://m.media-amazon.com/images/I/81D1T67ZflL._UF1000,1000_QL80_.jpg","status":"read","pages":288,"category":"Desenvolvimento Pessoal","desc":"Pesquisadora da Stanford apresenta a diferença entre mentalidade fixa e de crescimento, demonstrando que a crença na capacidade de aprender é o principal fator de realização pessoal e profissional."},{"title":"A Ordem do Subconsciente","author":"Joseph Murphy","cover":"https://m.media-amazon.com/images/I/81MmeUtR8BL._UF1000,1000_QL80_.jpg","status":"read","pages":288,"category":"Desenvolvimento Pessoal","desc":"Explora como programar a mente subconsciente através de visualização, afirmação e fé para transformar crenças limitantes em resultados concretos na saúde, riqueza e relacionamentos."},{"title":"A Revolução dos Bichos","author":"George Orwell","cover":"https://m.media-amazon.com/images/I/91BsZhxCRjL._AC_UF1000,1000_QL80_.jpg","status":"read","pages":160,"category":"Ficção","desc":"Fábula política em que animais de uma fazenda se rebelam contra os humanos mas acabam reproduzindo as mesmas estruturas de opressão — sátira devastadora ao totalitarismo e à corrupção do poder."},{"title":"Aprenda Idiomas em 7 Dias","author":"Ramon Campayo","cover":"https://m.media-amazon.com/images/I/71PxQjIOsDL.jpg","status":"read","pages":192,"category":"Aprendizado","desc":"Método do campeão mundial de memória para aquisição acelerada de idiomas, combinando técnicas mnemônicas, associação fonética e imersão mental para resultados em tempo recorde."},{"title":"Hábitos Atômicos","author":"James Clear","cover":"https://m.media-amazon.com/images/I/81eT2pjx4jL._SL1500_.jpg","status":"read","pages":320,"category":"Desenvolvimento Pessoal","desc":"Sistema comprovado para construir bons hábitos e eliminar os ruins, baseado na ideia de que pequenas melhorias de 1% ao dia geram resultados extraordinários ao longo do tempo."},{"title":"Love Is a Dog from Hell","author":"Charles Bukowski","cover":"https://m.media-amazon.com/images/I/71bqT9pZ5SL.jpg","status":"read","pages":280,"category":"Poesia","desc":"Coletânea de poemas brutalmente honestos sobre amor, solidão, álcool e a condição humana, escritos com a voz crua e sem filtros que tornou Bukowski um ícone da contracultura literária."},{"title":"Women","author":"Charles Bukowski","cover":"https://m.media-amazon.com/images/I/71G1RKKDzmL._AC_UF1000,1000_QL80_.jpg","status":"read","pages":288,"category":"Ficção","desc":"Romance autobiográfico em que Bukowski narra suas aventuras com dezenas de mulheres durante o período em que se tornou famoso, com ironia e honestidade desconcertantes sobre desejo e solidão."},{"title":"South of No North","author":"Charles Bukowski","cover":"https://m.media-amazon.com/images/I/51c1x8cbWyL.jpg","status":"read","pages":224,"category":"Ficção","desc":"Contos sobre perdedores, bêbados e sobreviventes às margens da América, retratando vidas sem redenção fácil com a precisão cortante característica de Bukowski."},{"title":"Ham on Eye","author":"Charles Bukowski","cover":"https://m.media-amazon.com/images/I/51y6UbuZe9L.jpg","status":"read","pages":272,"category":"Ficção","desc":"Poemas e prosa explorando o cotidiano degradado, o trabalho entorpecente e os vícios como forma de resistência — com o humor negro e a sinceridade brutal inconfundíveis de Bukowski."},{"title":"Dopamine Detox","author":"Thibaut Meurisse","cover":"https://http2.mlstatic.com/D_NQ_NP_2X_613219-MLA81840980789_012025-O.webp","status":"read","pages":132,"category":"Desenvolvimento Pessoal","desc":"Guia prático para resetar o sistema de recompensa do cérebro, reduzindo a dependência de estímulos fáceis como redes sociais para recuperar foco, motivação e satisfação genuína."},{"title":"O Ego é Seu Inimigo","author":"Ryan Holiday","cover":"https://m.media-amazon.com/images/I/61wr4eRbOUL.jpg","status":"read","pages":240,"category":"Desenvolvimento Pessoal","desc":"Ancorado no estoicismo e em casos históricos, mostra como o ego nos sabota nas três fases críticas — aspiração, sucesso e fracasso — e como a humildade é o caminho da grandeza real."},{"title":"Eric Clapton — A Autobiografia","author":"Eric Clapton","cover":"https://img.travessa.com.br/livro/GR/24/24881d01-d94b-4801-acc0-47f8b2748e47.jpg","status":"read","pages":368,"category":"Autobiografia","desc":"Relato sem censura da vida de um dos maiores guitarristas do mundo: infância difícil, ascensão ao estrelato, batalhas contra vícios, perdas devastadoras e redenção através da música."},{"title":"Hamlet","author":"William Shakespeare","cover":"https://cdn.kobo.com/book-images/389c6a10-f026-4bbe-a132-34072053689a/353/569/90/False/hamlet-271.jpg","status":"read","pages":192,"category":"Ficção","desc":"A mais célebre tragédia de Shakespeare: o príncipe Hamlet confronta a corrupção do reino dinamarquês após o assassinato do pai, explorando vingança, loucura e a condição humana."},{"title":"The Sun Also Rises","author":"Ernest Hemingway","cover":"https://m.media-amazon.com/images/I/71IwKUdkvQL.jpg","status":"read","pages":256,"category":"Ficção","desc":"Romance da Geração Perdida seguindo expatriados americanos em Paris e Pamplona após a Primeira Guerra, capturando a desorientação e o vazio de uma geração marcada pelo conflito."},{"title":"Inteligência Emocional","author":"Daniel Goleman","cover":"https://m.media-amazon.com/images/I/71f9R8hY23L._SL1500_.jpg","status":"read","pages":384,"category":"Psicologia","desc":"Obra seminal que demonstrou que o QI não determina o sucesso — a capacidade de reconhecer e gerenciar emoções é o fator decisivo em relacionamentos, liderança e realizações."},{"title":"Inteligência Multifocal","author":"Augusto Cury","cover":"https://m.media-amazon.com/images/I/61uc3CW3NxL._AC_UF1000,1000_QL80_.jpg","status":"read","pages":320,"category":"Psicologia","desc":"Teoria do psiquiatra brasileiro sobre como o cérebro constrói inteligência a partir de múltiplos focos, com aplicações para educação, criatividade e saúde mental."},{"title":"L'Étranger","author":"Albert Camus","cover":"https://m.media-amazon.com/images/I/317XcnvbrRL.jpg","status":"read","pages":160,"category":"Ficção","desc":"Romance existencialista em que Meursault, indiferente ao mundo, mata um árabe e é julgado mais por sua falta de emoção do que pelo crime — manifesto do absurdo camusiano."},{"title":"Le Petit Prince","author":"Antoine de Saint-Exupéry","cover":"https://m.media-amazon.com/images/I/91Kcgu2UpVL._AC_UF1000,1000_QL80_.jpg","status":"read","pages":96,"category":"Ficção","desc":"Conto filosófico sobre um príncipe que viaja de planeta em planeta aprendendo sobre amizade e o que realmente importa — escrito para adultos que esqueceram de ser crianças."},{"title":"Lifelong Learners","author":"Conrado Schlochauer","cover":"https://http2.mlstatic.com/D_NQ_NP_2X_978421-MLB46364595088_062021-F.webp","status":"read","pages":288,"category":"Aprendizado","desc":"Manifesto sobre como desenvolver a mentalidade e as práticas do aprendizado contínuo num mundo em transformação, com ferramentas para converter qualquer experiência em crescimento."},{"title":"Manual da Persuasão do FBI","author":"Jack Schafer","cover":"https://m.media-amazon.com/images/I/715Y9D5zNWL._SL1500_.jpg","status":"read","pages":288,"category":"Psicologia","desc":"Ex-agente do FBI revela técnicas de influência usadas em interrogatórios — adaptadas para o dia a dia: conquista de confiança, detecção de mentiras e influência de comportamentos."},{"title":"Mitologia Nórdica","author":"Neil Gaiman","cover":"https://m.media-amazon.com/images/I/819LTX8be9L.jpg","status":"read","pages":304,"category":"Mitologia","desc":"Recontagem vibrante dos mitos escandinavos — de Odin, Thor e Loki à criação do mundo e ao Ragnarök — com a maestria literária de Gaiman tornando os deuses antigos palpáveis e humanos."},{"title":"O Obstáculo é o Caminho","author":"Ryan Holiday","cover":"https://m.media-amazon.com/images/I/61605EmjZpL._AC_UF1000,1000_QL80_.jpg","status":"read","pages":224,"category":"Desenvolvimento Pessoal","desc":"Baseado na filosofia estoica, mostra como líderes históricos transformaram adversidades em vantagens usando percepção, ação e vontade para converter obstáculos em trampolins."},{"title":"O Poder da Ação","author":"Paulo Vieira","cover":"https://m.media-amazon.com/images/I/71vrSJIKk3L.jpg","status":"read","pages":288,"category":"Desenvolvimento Pessoal","desc":"Sistema para sair da inércia e tomar ação consistente em direção a metas, abordando crenças limitantes, medo do julgamento e procrastinação como os principais obstáculos."},{"title":"O Poder da Autorresponsabilidade","author":"Paulo Vieira","cover":"https://m.media-amazon.com/images/I/81syoL8gBSL._AC_UF1000,1000_QL80_.jpg","status":"read","pages":224,"category":"Desenvolvimento Pessoal","desc":"Assumir total responsabilidade pela própria vida — sem culpar circunstâncias ou pessoas — é o único caminho para resultados extraordinários e verdadeira liberdade pessoal."},{"title":"O Poder do Agora","author":"Eckhart Tolle","cover":"https://m.media-amazon.com/images/I/71sh8JtiZbL.jpg","status":"read","pages":240,"category":"Desenvolvimento Pessoal","desc":"Guia para libertar-se da tirania da mente pensante e viver plenamente no momento presente, eliminando o sofrimento causado pela ruminação do passado e ansiedade pelo futuro."},{"title":"O Poder do Hábito","author":"Charles Duhigg","cover":"https://m.media-amazon.com/images/I/815iPX0SgkL.jpg","status":"read","pages":408,"category":"Desenvolvimento Pessoal","desc":"Jornalista investiga a neurociência dos hábitos, revelando como o loop gatilho-rotina-recompensa governa comportamentos individuais e organizações — e como hackear esse ciclo para mudar."},{"title":"O Poder do Silêncio","author":"Eckhart Tolle","cover":"https://m.media-amazon.com/images/I/51fZ3mizwqL._AC_UF1000,1000_QL80_.jpg","status":"read","pages":128,"category":"Desenvolvimento Pessoal","desc":"Reflexões sobre como os espaços de silêncio interior são a porta de entrada para a consciência pura, a criatividade e uma forma de existência além do ego e do ruído mental."},{"title":"Os Segredos da Mente Milionária","author":"T. Harv Eker","cover":"https://m.media-amazon.com/images/I/81WzW3xJb5L.jpg","status":"read","pages":192,"category":"Finanças","desc":"Explora como o arquivo financeiro interno — crenças herdadas sobre dinheiro — sabota ou impulsiona a riqueza, apresentando os princípios que separam os ricos dos que lutam financeiramente."},{"title":"Poder Sem Limites","author":"Tony Robbins","cover":"https://m.media-amazon.com/images/I/71Xr89JmvkL.jpg","status":"read","pages":608,"category":"Desenvolvimento Pessoal","desc":"Obra fundacional de Tony Robbins sobre como usar corpo, linguagem e crenças para mudar estados emocionais e obter resultados extraordinários em qualquer área da vida."},{"title":"Por Que Fazemos o Que Fazemos?","author":"Mario Sergio Cortella","cover":"https://m.media-amazon.com/images/I/81UkGARZG+L._UF1000,1000_QL80_.jpg","status":"read","pages":160,"category":"Filosofia","desc":"Reflexão sobre motivação, propósito e sentido da ação humana — questionando o que nos move além do medo e da obrigação para alcançar realização genuína."},{"title":"Qual é a Tua Obra?","author":"Mario Sergio Cortella","cover":"https://m.media-amazon.com/images/I/81e4yRW7X6L._UF1000,1000_QL80_.jpg","status":"read","pages":160,"category":"Filosofia","desc":"Provocação sobre legado e trabalho com sentido, diferenciando emprego, carreira e vocação — convidando a refletir sobre o que cada um constrói com sua passagem pelo mundo."},{"title":"Silver Linings Playbook","author":"Matthew Quick","cover":"https://m.media-amazon.com/images/I/91f0gg8TC3L._UF350,350_QL50_.jpg","status":"read","pages":288,"category":"Ficção","desc":"Homem saindo de internação psiquiátrica tenta reconstruir sua vida, encontrando em uma mulher igualmente perturbada uma conexão inesperada e transformadora."},{"title":"Speak with No Fear","author":"Mike Acker","cover":"https://m.media-amazon.com/images/I/61QRBA1rFYL._AC_UF1000,1000_QL80_.jpg","status":"read","pages":176,"category":"Comunicação","desc":"Sete estratégias práticas para eliminar o medo de falar em público, transformando ansiedade em confiança através de técnicas testadas em apresentações de todos os tamanhos."},{"title":"Storytelling","author":"Carmine Gallo","cover":"https://m.media-amazon.com/images/I/81SYp6w0P-L.jpg","status":"read","pages":272,"category":"Comunicação","desc":"Como os melhores comunicadores do mundo usam narrativas para inspirar e persuadir, tornando ideias complexas simples e memoráveis — de Steve Jobs a líderes políticos."},{"title":"As 48 Leis do Poder","author":"Robert Greene","cover":"https://m.media-amazon.com/images/I/617iS--XOQL._AC_UF1000,1000_QL80_.jpg","status":"read","pages":480,"category":"Psicologia","desc":"Compilação das estratégias de poder usadas por conquistadores e políticos ao longo da história, destiladas em 48 leis com exemplos históricos e análises de como aplicar ou se defender delas."},{"title":"The Game","author":"Neil Strauss","cover":"https://d2wzqffx6hjwip.cloudfront.net/spree/images/attachments/000/037/530/original/9781922182401.jpg","status":"read","pages":464,"category":"Psicologia","desc":"Jornalista infiltra-se na comunidade de pickup artists e documenta sua transformação — e crise — ao aprender técnicas de sedução, num relato revelador sobre masculinidade e conexão humana."},{"title":"The Way of the Superior Man","author":"David Deida","cover":"https://m.media-amazon.com/images/I/91gWSXWDVoL.jpg","status":"read","pages":224,"category":"Desenvolvimento Pessoal","desc":"Guia espiritual sobre masculinidade, propósito e relacionamentos, explorando como viver com direção clara e presença total sem perder a própria essência."},{"title":"The Wim Hof Method","author":"Wim Hof","cover":"https://m.media-amazon.com/images/I/91vpbmiausL._AC_UF1000,1000_QL80_.jpg","status":"read","pages":256,"category":"Saúde","desc":"O Homem de Gelo compartilha seu método de respiração, exposição ao frio e mentalidade para controlar o sistema nervoso autônomo, fortalecer imunidade e alcançar estados de pico."},{"title":"Super Human","author":"Dave Asprey","cover":"https://m.media-amazon.com/images/I/81SWI+a9X6L.jpg","status":"read","pages":368,"category":"Saúde","desc":"Fundador do movimento biohacking apresenta protocolos para reverter o envelhecimento e maximizar energia, combinando dieta, sono, tecnologia e medicina de ponta."},{"title":"O Homem Mais Rico da Babilônia","author":"George S. Clason","cover":"https://m.media-amazon.com/images/I/81ehX6Quw2L._SL1500_.jpg","status":"read","pages":160,"category":"Finanças","desc":"Clássico atemporal que ensina princípios de riqueza através de parábolas babilônicas: pague-se primeiro, faça o dinheiro trabalhar e evite dívidas que não geram retorno."},{"title":"Pai Rico, Pai Pobre","author":"Robert T. Kiyosaki","cover":"https://m.media-amazon.com/images/I/71V4lNR2gKL._SL1500_.jpg","status":"read","pages":336,"category":"Finanças","desc":"Contraste entre trabalhar por dinheiro e fazer o dinheiro trabalhar, defendendo educação financeira, a distinção entre ativos e passivos e empreendedorismo como caminho para a independência."}]},
-  {label:'2026', key:'2026', seed:[{"title":"Comece pelo Porquê","author":"Simon Sinek","cover":"https://m.media-amazon.com/images/I/71M6czhxmTL._SL1500_.jpg","status":"unread","pages":256,"category":"Negócios","desc":"Sinek revela que líderes e organizações inspiradores não começam pelo o quê fazem, mas pelo porquê — o propósito que move tudo. O Círculo Dourado explica a diferença entre influência e manipulação."},{"title":"Geração de Valor 1","author":"Flávio Augusto","cover":"https://m.media-amazon.com/images/I/71z4OlvVgwL.jpg","status":"unread","pages":288,"category":"Negócios","desc":"O fundador do Wise Up compartilha sua trajetória e filosofia: como gerar valor real antes de cobrar por ele, construindo negócios sólidos sobre princípios éticos e visão de longo prazo."},{"title":"Geração de Valor 2","author":"Flávio Augusto","cover":"https://m.media-amazon.com/images/I/51LHaoAaZUL._AC_UF1000,1000_QL80_.jpg","status":"unread","pages":288,"category":"Negócios","desc":"Continuação da série com reflexões sobre liderança, empreendedorismo e a construção de uma cultura organizacional baseada em propósito, meritocracia e criação de valor consistente."},{"title":"Geração de Valor 3","author":"Flávio Augusto","cover":"https://m.media-amazon.com/images/I/71XK+AhWGAL._AC_UF1000,1000_QL80_.jpg","status":"unread","pages":288,"category":"Negócios","desc":"Terceiro volume com lições práticas sobre mindset empresarial, tomada de decisão em cenários adversos e como transformar crise em oportunidade de crescimento acelerado."},{"title":"Encontre seu Porquê","author":"Simon Sinek","cover":"https://m.media-amazon.com/images/I/711uGRi6uzL._SL1500_.jpg","status":"unread","pages":256,"category":"Negócios","desc":"Guia prático para aplicar os conceitos de 'Comece pelo Porquê', com exercícios e ferramentas para descobrir o propósito pessoal e organizacional de forma concreta e acionável."},{"title":"A Coragem de Não Agradar","author":"Ichiro Kishimi & Fumitake Koga","cover":"https://m.media-amazon.com/images/I/51TgheB19FL._SY466_.jpg","status":"unread","pages":272,"category":"Psicologia","desc":"Diálogo filosófico baseado na psicologia de Alfred Adler: toda infelicidade vem de relacionamentos interpessoais e a coragem de ser desaprovado é o caminho para a liberdade real."},{"title":"O Poder dos Quietos","author":"Susan Cain","cover":"https://m.media-amazon.com/images/I/71mrHgmiBqL._SL1500_.jpg","status":"unread","pages":352,"category":"Psicologia","desc":"Manifesto sobre como o mundo supervaloriza a extroversão ignorando o poder dos introvertidos — responsáveis por grande parte das maiores inovações, obras de arte e lideranças da história."},{"title":"Você É Placebo","author":"Joe Dispenza","cover":"https://m.media-amazon.com/images/I/51-QfJkDYLL._SL1360_.jpg","status":"unread","pages":384,"category":"Desenvolvimento Pessoal","desc":"O neurocientista demonstra como pensamentos e emoções recorrentes criam a realidade biológica e como o efeito placebo revela o poder da mente de curar o corpo e transformar circunstâncias."},{"title":"Quebrando o Hábito de Ser Você Mesmo","author":"Joe Dispenza","cover":"https://m.media-amazon.com/images/I/61a6IJf2BeL._SL1200_.jpg","status":"unread","pages":368,"category":"Desenvolvimento Pessoal","desc":"Programa prático de meditação e neuroplasticidade para reprogramar padrões automáticos de pensamento e emoção, criando literalmente uma nova identidade neurológica."},{"title":"Arriscando a Própria Pele","author":"Nassim Nicholas Taleb","cover":"https://m.media-amazon.com/images/I/61sb8kdjBqL._SL1500_.jpg","status":"unread","pages":304,"category":"Filosofia","desc":"Taleb argumenta que só quem tem algo a perder deve ser ouvido — exposição ao risco próprio é o único critério de honestidade intelectual e o que separa os que falam dos que fazem."},{"title":"Psicologia Financeira","author":"Morgan Housel","cover":"https://m.media-amazon.com/images/I/71vZp6yONLL._SL1500_.jpg","status":"unread","pages":256,"category":"Finanças","desc":"Dinheiro não é sobre planilhas — é sobre comportamento. Housel explora como nossos vieses, medos e ego sabotam decisões financeiras através de histórias e princípios atemporais."},{"title":"O Investidor Inteligente","author":"Benjamin Graham","cover":"https://m.media-amazon.com/images/I/61Q2pK79yWL._SL1392_.jpg","status":"unread","pages":640,"category":"Finanças","desc":"A bíblia do value investing, escrita pelo mentor de Warren Buffett: como analisar empresas com margem de segurança, resistir à irracionalidade do mercado e investir com disciplina de longo prazo."},{"title":"A Arte de Gastar Dinheiro","author":"Morgan Housel","cover":"https://m.media-amazon.com/images/I/71E11rBuqHL._SL1500_.jpg","status":"unread","pages":256,"category":"Finanças","desc":"Sequência de Psicologia Financeira explorando como gastar de forma que maximize satisfação real e não apenas status, alinhando dinheiro com valores e o que de fato importa na vida."},{"title":"Trabalhe 4 Horas por Semana","author":"Timothy Ferriss","cover":"https://http2.mlstatic.com/D_NQ_NP_2X_948894-MLU50457220672_062022-F.webp","status":"unread","pages":416,"category":"Negócios","desc":"Manual para escapar da armadilha do trabalho convencional: automação, delegação, eliminação do supérfluo e design intencional de uma vida de mobilidade, liberdade e mini-aposentadorias."},{"title":"Crédito Vale Mais","author":"Eduardo Augusto Sousa","cover":"https://m.media-amazon.com/images/I/61OKDsQAXKL._UF1000,1000_QL80_.jpg","status":"unread","pages":208,"category":"Finanças","desc":"Guia prático sobre como usar crédito de forma estratégica no contexto brasileiro — construindo score, negociando juros e transformando o crédito em ferramenta de crescimento e não de armadilha."}]},
+  {label:'2026', key:'2026', seed:[{"title":"Comece pelo Porquê","author":"Simon Sinek","cover":"https://m.media-amazon.com/images/I/71M6czhxmTL._SL1500_.jpg","status":"unread","pages":256,"category":"Negócios","desc":"Sinek revela que líderes e organizações inspiradores não começam pelo o quê fazem, mas pelo porquê — o propósito que move tudo. O Círculo Dourado explica a diferença entre influência e manipulação."},{"title":"Geração de Valor 1","author":"Flávio Augusto","cover":"https://m.media-amazon.com/images/I/71z4OlvVgwL.jpg","status":"unread","pages":208,"category":"Negócios","desc":"O fundador do Wise Up compartilha sua trajetória e filosofia: como gerar valor real antes de cobrar por ele, construindo negócios sólidos sobre princípios éticos e visão de longo prazo."},{"title":"Geração de Valor 2","author":"Flávio Augusto","cover":"https://m.media-amazon.com/images/I/51LHaoAaZUL._AC_UF1000,1000_QL80_.jpg","status":"unread","pages":208,"category":"Negócios","desc":"Continuação da série com reflexões sobre liderança, empreendedorismo e a construção de uma cultura organizacional baseada em propósito, meritocracia e criação de valor consistente."},{"title":"Geração de Valor 3","author":"Flávio Augusto","cover":"https://m.media-amazon.com/images/I/71XK+AhWGAL._AC_UF1000,1000_QL80_.jpg","status":"unread","pages":208,"category":"Negócios","desc":"Terceiro volume com lições práticas sobre mindset empresarial, tomada de decisão em cenários adversos e como transformar crise em oportunidade de crescimento acelerado."},{"title":"Encontre seu Porquê","author":"Simon Sinek","cover":"https://m.media-amazon.com/images/I/711uGRi6uzL._SL1500_.jpg","status":"unread","pages":256,"category":"Negócios","desc":"Guia prático para aplicar os conceitos de 'Comece pelo Porquê', com exercícios e ferramentas para descobrir o propósito pessoal e organizacional de forma concreta e acionável."},{"title":"A Coragem de Não Agradar","author":"Ichiro Kishimi & Fumitake Koga","cover":"https://m.media-amazon.com/images/I/51TgheB19FL._SY466_.jpg","status":"unread","pages":272,"category":"Psicologia","desc":"Diálogo filosófico baseado na psicologia de Alfred Adler: toda infelicidade vem de relacionamentos interpessoais e a coragem de ser desaprovado é o caminho para a liberdade real."},{"title":"O Poder dos Quietos","author":"Susan Cain","cover":"https://m.media-amazon.com/images/I/71mrHgmiBqL._SL1500_.jpg","status":"unread","pages":352,"category":"Psicologia","desc":"Manifesto sobre como o mundo supervaloriza a extroversão ignorando o poder dos introvertidos — responsáveis por grande parte das maiores inovações, obras de arte e lideranças da história."},{"title":"Você É Placebo","author":"Joe Dispenza","cover":"https://m.media-amazon.com/images/I/51-QfJkDYLL._SL1360_.jpg","status":"unread","pages":384,"category":"Desenvolvimento Pessoal","desc":"O neurocientista demonstra como pensamentos e emoções recorrentes criam a realidade biológica e como o efeito placebo revela o poder da mente de curar o corpo e transformar circunstâncias."},{"title":"Quebrando o Hábito de Ser Você Mesmo","author":"Joe Dispenza","cover":"https://m.media-amazon.com/images/I/61a6IJf2BeL._SL1200_.jpg","status":"unread","pages":368,"category":"Desenvolvimento Pessoal","desc":"Programa prático de meditação e neuroplasticidade para reprogramar padrões automáticos de pensamento e emoção, criando literalmente uma nova identidade neurológica."},{"title":"Arriscando a Própria Pele","author":"Nassim Nicholas Taleb","cover":"https://m.media-amazon.com/images/I/61sb8kdjBqL._SL1500_.jpg","status":"unread","pages":304,"category":"Filosofia","desc":"Taleb argumenta que só quem tem algo a perder deve ser ouvido — exposição ao risco próprio é o único critério de honestidade intelectual e o que separa os que falam dos que fazem."},{"title":"Psicologia Financeira","author":"Morgan Housel","cover":"https://m.media-amazon.com/images/I/71vZp6yONLL._SL1500_.jpg","status":"unread","pages":256,"category":"Finanças","desc":"Dinheiro não é sobre planilhas — é sobre comportamento. Housel explora como nossos vieses, medos e ego sabotam decisões financeiras através de histórias e princípios atemporais."},{"title":"O Investidor Inteligente","author":"Benjamin Graham","cover":"https://m.media-amazon.com/images/I/61Q2pK79yWL._SL1392_.jpg","status":"unread","pages":640,"category":"Finanças","desc":"A bíblia do value investing, escrita pelo mentor de Warren Buffett: como analisar empresas com margem de segurança, resistir à irracionalidade do mercado e investir com disciplina de longo prazo."},{"title":"A Arte de Gastar Dinheiro","author":"Morgan Housel","cover":"https://m.media-amazon.com/images/I/71E11rBuqHL._SL1500_.jpg","status":"unread","pages":256,"category":"Finanças","desc":"Sequência de Psicologia Financeira explorando como gastar de forma que maximize satisfação real e não apenas status, alinhando dinheiro com valores e o que de fato importa na vida."},{"title":"Trabalhe 4 Horas por Semana","author":"Timothy Ferriss","cover":"https://http2.mlstatic.com/D_NQ_NP_2X_948894-MLU50457220672_062022-F.webp","status":"unread","pages":416,"category":"Negócios","desc":"Manual para escapar da armadilha do trabalho convencional: automação, delegação, eliminação do supérfluo e design intencional de uma vida de mobilidade, liberdade e mini-aposentadorias."},{"title":"Crédito Vale Mais","author":"Eduardo Augusto Sousa","cover":"https://m.media-amazon.com/images/I/61OKDsQAXKL._UF1000,1000_QL80_.jpg","status":"unread","pages":208,"category":"Finanças","desc":"Guia prático sobre como usar crédito de forma estratégica no contexto brasileiro — construindo score, negociando juros e transformando o crédito em ferramenta de crescimento e não de armadilha."}]},
   {label:'2027', key:'2027', seed:[]}
 ];
 var READ_FILTER = {status:'all', sort:'alpha'};
@@ -1510,7 +1539,7 @@ function applyTheme(theme){
   document.documentElement.setAttribute('data-theme',t);
   try{localStorage.setItem('home_theme',t);}catch(e){}
   var btn=document.getElementById('theme-toggle-btn');
-  if(btn) btn.textContent=t==='light'?'🌙 Escuro':'☀️ Claro';
+  if(btn){btn.textContent=t==='light'?'🌙':'☀';}
 }
 function toggleTheme(){
   var cur=document.documentElement.getAttribute('data-theme')||'dark';
@@ -2263,43 +2292,53 @@ function langSearch(lang){langRenderTable(lang);}
 var READ={active:READ_TABS[0].key,data:{}};
 
 function readLoad(remoteOnly){
-  document.getElementById('read-book-list').innerHTML='<div class="msgLoad">Carregando…</div>';
+  document.getElementById('read-book-list').innerHTML='<div class="msgLoad">Carregando do Firebase…</div>';
   readRenderTabs();
-  try{ if(!remoteOnly){ var cache=JSON.parse(localStorage.getItem('read_cache_v1')||'null'); if(cache&&cache.data) READ.data=cache.data; }}catch(e){}
 
-  /* Step 1: seed local data from hardcoded arrays so books always show immediately */
-  READ_TABS.forEach(function(tab){
-    if(!READ.data[tab.key]&&tab.seed&&tab.seed.length){
-      var obj={};
-      tab.seed.forEach(function(b,i){obj['b'+String(i).padStart(3,'0')]=b;});
-      READ.data[tab.key]=obj;
-    }
-  });
-  readRenderYear(); /* show books immediately */
-
-  /* Step 2: fetch from Firebase and override/merge */
-  fetch(READ_FB+'.json')
-    .then(function(r){return r.json();})
-    .then(function(data){
-      data=data||{};
-      var saves=[];
+  /* Step 1: show cached/seed data immediately while Firebase loads */
+  if(!remoteOnly){
+    try{
+      var cache=JSON.parse(localStorage.getItem('read_cache_v1')||'null');
+      if(cache&&cache.data&&(Date.now()-cache.ts<300000)){READ.data=cache.data;} /* max 5min cache */
+    }catch(e){}
+    if(!Object.keys(READ.data).length){
+      /* No cache — show seed as placeholder */
       READ_TABS.forEach(function(tab){
-        var fbData=data[tab.key];
-        if(fbData&&Object.keys(fbData).length){
-          /* Firebase has data — use it */
-          READ.data[tab.key]=fbData;
-        } else if(READ.data[tab.key]){
-          /* Firebase empty — push local seed */
-          saves.push(fetch(READ_FB+'/'+tab.key+'.json',{
-            method:'PUT',headers:{'Content-Type':'application/json'},
-            body:JSON.stringify(READ.data[tab.key])
-          }));
+        if(tab.seed&&tab.seed.length){
+          var obj={};tab.seed.forEach(function(b,i){obj['b'+String(i).padStart(3,'0')]=b;});
+          READ.data[tab.key]=obj;
         }
       });
-      return Promise.all(saves);
+    }
+    readRenderYear();
+  }
+
+  /* Step 2: ALWAYS fetch from Firebase — it is the source of truth */
+  fetch(READ_FB+'.json')
+    .then(function(r){
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      return r.json();
     })
-    .then(function(){try{localStorage.setItem('read_cache_v1',JSON.stringify({data:READ.data,ts:Date.now()}));}catch(e){}readRenderYear();})
-    .catch(function(){/* offline — already showing seed data */});
+    .then(function(fbAll){
+      fbAll=fbAll||{};
+      /* Replace in-memory data with whatever Firebase has */
+      READ_TABS.forEach(function(tab){
+        var fbData=fbAll[tab.key];
+        if(fbData&&typeof fbData==='object'&&Object.keys(fbData).length){
+          READ.data[tab.key]=fbData; /* Firebase wins always */
+        } else if(!READ.data[tab.key]){
+          READ.data[tab.key]={}; /* Firebase empty and no local — empty */
+        }
+        /* Note: we do NOT push seed to Firebase. User controls what goes to Firebase via "Exportar" */
+      });
+      try{localStorage.setItem('read_cache_v1',JSON.stringify({data:READ.data,ts:Date.now()}));}catch(e){}
+      readRenderYear();
+    })
+    .catch(function(e){
+      /* Offline or error — keep showing what we have */
+      showToast('⚠ Firebase offline — mostrando dados locais');
+      readRenderYear();
+    });
 }
 function readRenderTabs(){
   document.getElementById('read-tabs').innerHTML=READ_TABS.map(function(tab){
@@ -2347,52 +2386,62 @@ function readEditSingle(key,bookId){
   readRenderYear();
 }
 function readRefresh(){
+  try{localStorage.removeItem('read_cache_v1');}catch(e){}
+  READ.data={};
+  showToast('↻ Buscando dados do Firebase…');
   readLoad(true);
-  showToast('↻ Leitura atualizada');
 }
 function readExportAllFirebase(){
-  var payload={updatedAt:new Date().toISOString(),tabs:{},summary:{}};
-  Object.keys(READ.data||{}).forEach(function(tabKey){
-    var books=READ.data[tabKey]||{};
-    payload.tabs[tabKey]={books:books,count:Object.keys(books).length};
-    var vals=Object.values(books);
-    payload.summary[tabKey]={
-      totalBooks:vals.length,
-      totalPages:vals.reduce(function(a,b){return a+(+b.pages||0);},0),
-      readBooks:vals.filter(function(b){return b.status==='read';}).length,
-      readingBooks:vals.filter(function(b){return b.status==='reading';}).length,
-      unreadBooks:vals.filter(function(b){return b.status==='unread';}).length
-    };
+  /* Write ALL in-memory book data to /leitura/{key} on Firebase */
+  var tabs=READ_TABS.filter(function(t){return READ.data[t.key]&&Object.keys(READ.data[t.key]).length;});
+  if(!tabs.length){showToast('⚠ Nenhum dado para exportar');return;}
+  showToast('⏳ Salvando no Firebase…');
+  var promises=tabs.map(function(tab){
+    return fetch(READ_FB+'/'+tab.key+'.json',{
+      method:'PUT',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(READ.data[tab.key])
+    }).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status+' ('+tab.key+')');return r;});
   });
-  fetch(FB_DB+'/leitura_export.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
-    .then(function(){showToast('✓ Exportado para /leitura_export');})
-    .catch(function(e){showToast('⚠ Export falhou: '+e.message);});
+  Promise.all(promises)
+    .then(function(){
+      try{localStorage.setItem('read_cache_v1',JSON.stringify({data:READ.data,ts:Date.now()}));}catch(e){}
+      showToast('✓ Todos os livros salvos no Firebase!');
+    })
+    .catch(function(e){showToast('⚠ Erro ao exportar: '+e.message);});
 }
 
 function readSaveBook(key,bookId,book){
   return fetch(READ_FB+'/'+key+'/'+bookId+'.json',{
     method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(book)
-  }).then(function(r){try{localStorage.setItem('read_cache_v1',JSON.stringify({data:READ.data,ts:Date.now()}));}catch(e){}return r;})
-    .catch(function(e){showToast('⚠ Sync erro: '+e.message);});
+  }).then(function(r){
+    if(!r.ok)throw new Error('HTTP '+r.status+' — verifique as regras do Firebase');
+    try{localStorage.setItem('read_cache_v1',JSON.stringify({data:READ.data,ts:Date.now()}));}catch(e){}
+    return r;
+  }).catch(function(e){showToast('⚠ Firebase: '+e.message);throw e;});
 }
 function readDeleteBook(key,bookId){
   if(!confirm('Remover este livro?')) return;
   if(READ.data[key]) delete READ.data[key][bookId];
-  readRenderYear();  /* immediate */
+  try{localStorage.setItem('read_cache_v1',JSON.stringify({data:READ.data,ts:Date.now()}));}catch(e){}
+  readRenderYear();
   fetch(READ_FB+'/'+key+'/'+bookId+'.json',{method:'DELETE'})
-    .then(function(){showToast('✓ Livro removido');})
+    .then(function(r){
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      showToast('✓ Livro removido');
+    })
     .catch(function(e){showToast('⚠ Firebase: '+e.message);});
 }
 function readAddBook(){
   var key=READ.active;
   if(!READ.data[key]) READ.data[key]={};
   var newId='b'+Date.now();
-  var book={title:'Novo Livro',author:'',cover:'',status:'unread',pages:0,pagesRead:0,category:'',desc:''};
+  var now=new Date().toISOString();
+  var book={title:'Novo Livro',author:'',cover:'',status:'unread',pages:0,pagesRead:0,category:'',desc:'',createdAt:now,updatedAt:now,tags:[]};
   READ.data[key][newId]=book;
-  readRenderYear();  /* show immediately */
+  readRenderYear();
   readSaveBook(key,newId,book)
-    .then(function(){showToast('✓ Livro adicionado');})
-    .catch(function(e){showToast('⚠ Firebase: '+e.message);});
+    .then(function(){showToast('✓ Livro adicionado e salvo no Firebase!');})
+    .catch(function(){/* error already shown by readSaveBook */});
 }
 function readChangeStatus(key,bookId,val){
   var book=(READ.data[key]||{})[bookId];if(!book)return;
@@ -2403,8 +2452,13 @@ function readEditField(key,bookId,field,el){
   var book=(READ.data[key]||{})[bookId];if(!book)return;
   var val=el.tagName==='SELECT'?el.value:(el.innerText||el.textContent||'');
   book[field]=((field==='pages'||field==='pagesRead')?(parseInt(val)||0):val.trim());
+  book.updatedAt=new Date().toISOString();
   clearTimeout(el._st);
-  el._st=setTimeout(function(){readSaveBook(key,bookId,book).then(function(){readRenderYear();});},700);
+  el._st=setTimeout(function(){
+    readSaveBook(key,bookId,book)
+      .then(function(){readRenderYear();})
+      .catch(function(){});
+  },700);
 }
 function readSetCover(key,bookId,val){
   var book=(READ.data[key]||{})[bookId];if(!book)return;
