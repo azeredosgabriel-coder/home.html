@@ -17,11 +17,25 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Segoe UI,system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);padding-top:var(--nav-h)}
 
+:root[data-theme='light']{
+  --bg:#F4F7FB;--panel:rgba(0,0,0,.02);
+  --text:#111827;--muted:#5b6472;
+  --stroke:rgba(17,24,39,.12);--stroke2:rgba(17,24,39,.24);
+  --accent:rgba(109,40,217,.95);--accent2:rgba(14,116,144,.95);
+}
+:root[data-theme='light'] .nav{background:rgba(244,247,251,.93)}
+:root[data-theme='light'] .box,:root[data-theme='light'] .card{background:rgba(255,255,255,.75)}
+:root[data-theme='light'] .homeTitleText{background:linear-gradient(135deg,#111827 40%,rgba(109,40,217,.7));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+
 /* ── NAV ── */
 .nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:var(--nav-h);
   background:rgba(11,15,20,.93);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
   border-bottom:1px solid var(--stroke);display:flex;align-items:center;}
 .navInner{max-width:1200px;margin:auto;padding:0 16px;display:flex;align-items:center;gap:3px;width:100%;overflow-x:auto;scrollbar-width:none}
+.navSpacer{flex:1 1 auto}
+.themeBtn{padding:6px 10px;border-radius:8px;border:1px solid var(--stroke);background:rgba(255,255,255,.04);color:var(--muted);cursor:pointer;font-size:12px;flex-shrink:0}
+.themeBtn:hover{color:var(--text);background:rgba(255,255,255,.09)}
 .navInner::-webkit-scrollbar{display:none}
 .navLogo{font-size:15px;font-weight:800;margin-right:14px;flex-shrink:0;
   background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
@@ -771,6 +785,10 @@ body{font-family:Segoe UI,system-ui,-apple-system,sans-serif;background:var(--bg
 .readAddBtn{padding:5px 12px;background:rgba(138,91,255,.15);border:1px solid rgba(138,91,255,.35);
   border-radius:8px;color:rgba(138,91,255,.9);font-size:12px;font-weight:700;cursor:pointer;transition:all .14s}
 .readAddBtn:hover{background:rgba(138,91,255,.25)}
+.readRefreshBtn{padding:5px 10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;color:rgba(154,164,178,.5);font-size:13px;cursor:pointer;transition:all .14s}
+.readRefreshBtn:hover{color:var(--text);background:rgba(255,255,255,.08)}
+.bookInlineEditBtn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;padding:2px 4px;border-radius:6px}
+.bookInlineEditBtn:hover{color:var(--text);background:rgba(255,255,255,.07)}
 
 /* ── BOOK CATEGORY TAG ── */
 .bookBottom{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:5px}
@@ -813,6 +831,8 @@ select.bookEditInput{appearance:none;-webkit-appearance:none;background-color:#0
     <button class="navBtn" onclick="showSection('musica')">Música</button>
     <button class="navBtn" onclick="showSection('pc')">PC Gamer</button>
     <button class="navBtn" onclick="showSection('links')">Links</button>
+    <span class="navSpacer"></span>
+    <button class="themeBtn" id="theme-toggle-btn" onclick="toggleTheme()" title="Alternar tema">☀️ Claro</button>
   </div>
 </nav>
 
@@ -1128,10 +1148,10 @@ select.bookEditInput{appearance:none;-webkit-appearance:none;background-color:#0
           <button class="htDateNavBtn" onclick="htNavDate(1)" title="Próximo dia">›</button>
         </div>
         <div class="habitsTodayScore" id="habits-today-score"></div>
-        <div class="habitsTodayArrow open" id="habits-today-arrow">›</div>
+        <div class="habitsTodayArrow" id="habits-today-arrow">›</div>
       </div>
     </div>
-    <div class="habitsTodayBody" id="habits-today-body">
+    <div class="habitsTodayBody" id="habits-today-body" style="display:none">
       <div id="habits-today-grid">
         <div class="msgLoad">Carregando…</div>
       </div>
@@ -1241,7 +1261,9 @@ select.bookEditInput{appearance:none;-webkit-appearance:none;background-color:#0
     <h2>Leitura</h2>
     <div style="display:flex;align-items:center;gap:8px">
       <button class="readEditToggleBtn" id="read-edit-btn" onclick="readToggleEdit()" title="Modo edição">✎</button>
+      <button class="readRefreshBtn" onclick="readRefresh()" title="Recarregar dados de leitura">↻</button>
       <button class="readAddBtn" id="read-add-btn" onclick="readAddBook()" style="display:none">+ Livro</button>
+      <button class="readAddBtn" onclick="readExportAllFirebase()" title="Exportar leitura para Firebase">⤴ Exportar</button>
     </div>
   </div>
   <div class="readFilterRow" id="read-filter-row">
@@ -1462,6 +1484,7 @@ var READ_TABS = [
 ];
 var READ_FILTER = {status:'all', sort:'alpha'};
 var READ_EDIT_MODE = false;
+var READ_EDIT_BOOK = null;
 var READ_FB = FB_DB + '/leitura';
 
 /* ═══ SAUDAÇÃO + CHAVE ═══ */
@@ -1480,6 +1503,18 @@ function copyKey(){
     var ta=document.createElement('textarea');ta.value=secret;ta.style.position='fixed';ta.style.opacity='0';
     document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();showToast('🔑 Código copiado!');
   }
+}
+
+function applyTheme(theme){
+  var t=(theme==='light')?'light':'dark';
+  document.documentElement.setAttribute('data-theme',t);
+  try{localStorage.setItem('home_theme',t);}catch(e){}
+  var btn=document.getElementById('theme-toggle-btn');
+  if(btn) btn.textContent=t==='light'?'🌙 Escuro':'☀️ Claro';
+}
+function toggleTheme(){
+  var cur=document.documentElement.getAttribute('data-theme')||'dark';
+  applyTheme(cur==='dark'?'light':'dark');
 }
 
 /* ═══ NAVEGAÇÃO ═══ */
@@ -2111,7 +2146,7 @@ function renderCal(){
     /* variável com ano */
     var d=parseDateCal(s,calY,calM);if(!d)return;if(d.getFullYear()===calY&&d.getMonth()===calM){var dd=d.getDate();if(!evMap[dd])evMap[dd]=[];evMap[dd].push(ev);}
   }
-  calEvFix.forEach(addEv);calEvVar.forEach(addEv);
+  calEvFix.forEach(addEv);calEvVar.forEach(addEv);window.calEvMap=evMap;
   var html='';
   for(var i=0;i<firstDay;i++) html+='<div class="calCell"></div>';
   for(var dd=1;dd<=dim;dd++){
@@ -2122,8 +2157,7 @@ function renderCal(){
     var cls='calCell inM'+(isToday?' todayC':'')+(evCls?' '+evCls:'');
     var attrs='';
     if(evs.length){
-      var pl=JSON.stringify(evs.map(function(e){return{title:e.title,info:e.info,type:e.type};}));
-      attrs=' data-ev="'+esc(pl)+'" onmouseenter="calTipShow(this,event)" onmouseleave="calTipHide()"';
+      attrs=' data-day="'+dd+'" onmouseenter="calTipShow(this,event)" onmouseleave="calTipHide()"';
     }
     html+='<div class="'+cls+'"'+attrs+'>'+dd+'</div>';
   }
@@ -2133,7 +2167,10 @@ var calTipEl=null;
 function calTipShow(el,evt){
   if(!calTipEl)calTipEl=document.getElementById('calTip');
   try{
-    var evs=JSON.parse(el.getAttribute('data-ev')||'[]');if(!evs.length)return;
+    var day=+(el.getAttribute('data-day')||0);
+    if(!day)return;
+    var evs=(window.calEvMap&&window.calEvMap[day])?window.calEvMap[day].map(function(e){return{title:e.title,info:e.info,type:e.type};}):[];
+    if(!evs.length)return;
     calTipEl.innerHTML=evs.map(function(ev,i){
       return(i>0?'<hr class="ttSep">':'')
         +'<div class="ttTitle">'+esc(ev.title)+'</div>'
@@ -2225,9 +2262,10 @@ function langSearch(lang){langRenderTable(lang);}
 ════════════════════════════════════════ */
 var READ={active:READ_TABS[0].key,data:{}};
 
-function readLoad(){
+function readLoad(remoteOnly){
   document.getElementById('read-book-list').innerHTML='<div class="msgLoad">Carregando…</div>';
   readRenderTabs();
+  try{ if(!remoteOnly){ var cache=JSON.parse(localStorage.getItem('read_cache_v1')||'null'); if(cache&&cache.data) READ.data=cache.data; }}catch(e){}
 
   /* Step 1: seed local data from hardcoded arrays so books always show immediately */
   READ_TABS.forEach(function(tab){
@@ -2260,7 +2298,7 @@ function readLoad(){
       });
       return Promise.all(saves);
     })
-    .then(function(){readRenderYear();})
+    .then(function(){try{localStorage.setItem('read_cache_v1',JSON.stringify({data:READ.data,ts:Date.now()}));}catch(e){}readRenderYear();})
     .catch(function(){/* offline — already showing seed data */});
 }
 function readRenderTabs(){
@@ -2293,16 +2331,49 @@ function readSetSort(val,btn){
 }
 function readToggleEdit(){
   READ_EDIT_MODE=!READ_EDIT_MODE;
+  if(!READ_EDIT_MODE) READ_EDIT_BOOK=null;
   var btn=document.getElementById('read-edit-btn');
   var addBtn=document.getElementById('read-add-btn');
   if(btn){btn.textContent=READ_EDIT_MODE?'✓ Pronto':'✎';btn.classList.toggle('active',READ_EDIT_MODE);}
   if(addBtn) addBtn.style.display=READ_EDIT_MODE?'':'none';
   readRenderYear();
 }
+function readEditSingle(key,bookId){
+  READ_EDIT_MODE=true;
+  READ_EDIT_BOOK=bookId;
+  var btn=document.getElementById('read-edit-btn');
+  if(btn){btn.textContent='✓ Pronto';btn.classList.add('active');}
+  document.getElementById('read-add-btn').style.display='';
+  readRenderYear();
+}
+function readRefresh(){
+  readLoad(true);
+  showToast('↻ Leitura atualizada');
+}
+function readExportAllFirebase(){
+  var payload={updatedAt:new Date().toISOString(),tabs:{},summary:{}};
+  Object.keys(READ.data||{}).forEach(function(tabKey){
+    var books=READ.data[tabKey]||{};
+    payload.tabs[tabKey]={books:books,count:Object.keys(books).length};
+    var vals=Object.values(books);
+    payload.summary[tabKey]={
+      totalBooks:vals.length,
+      totalPages:vals.reduce(function(a,b){return a+(+b.pages||0);},0),
+      readBooks:vals.filter(function(b){return b.status==='read';}).length,
+      readingBooks:vals.filter(function(b){return b.status==='reading';}).length,
+      unreadBooks:vals.filter(function(b){return b.status==='unread';}).length
+    };
+  });
+  fetch(FB_DB+'/leitura_export.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+    .then(function(){showToast('✓ Exportado para /leitura_export');})
+    .catch(function(e){showToast('⚠ Export falhou: '+e.message);});
+}
+
 function readSaveBook(key,bookId,book){
   return fetch(READ_FB+'/'+key+'/'+bookId+'.json',{
     method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(book)
-  }).catch(function(e){showToast('⚠ Sync erro: '+e.message);});
+  }).then(function(r){try{localStorage.setItem('read_cache_v1',JSON.stringify({data:READ.data,ts:Date.now()}));}catch(e){}return r;})
+    .catch(function(e){showToast('⚠ Sync erro: '+e.message);});
 }
 function readDeleteBook(key,bookId){
   if(!confirm('Remover este livro?')) return;
@@ -2316,7 +2387,7 @@ function readAddBook(){
   var key=READ.active;
   if(!READ.data[key]) READ.data[key]={};
   var newId='b'+Date.now();
-  var book={title:'Novo Livro',author:'',cover:'',status:'unread',pages:0,category:'',desc:''};
+  var book={title:'Novo Livro',author:'',cover:'',status:'unread',pages:0,pagesRead:0,category:'',desc:''};
   READ.data[key][newId]=book;
   readRenderYear();  /* show immediately */
   readSaveBook(key,newId,book)
@@ -2331,7 +2402,7 @@ function readChangeStatus(key,bookId,val){
 function readEditField(key,bookId,field,el){
   var book=(READ.data[key]||{})[bookId];if(!book)return;
   var val=el.tagName==='SELECT'?el.value:(el.innerText||el.textContent||'');
-  book[field]=(field==='pages'?(parseInt(val)||0):val.trim());
+  book[field]=((field==='pages'||field==='pagesRead')?(parseInt(val)||0):val.trim());
   clearTimeout(el._st);
   el._st=setTimeout(function(){readSaveBook(key,bookId,book).then(function(){readRenderYear();});},700);
 }
@@ -2362,7 +2433,7 @@ function readRenderYear(){
   var books=Object.keys(raw).map(function(bookId){
     var b=raw[bookId]||{};
     return{bookId:bookId,title:b.title||'',author:b.author||'',desc:b.desc||'',
-      status:b.status||'unread',pages:+(b.pages||0),cover:b.cover||'',category:b.category||''};
+      status:b.status||'unread',pages:+(b.pages||0),pagesRead:+(b.pagesRead||0),cover:b.cover||'',category:b.category||''};
   }).filter(function(b){return b.title;});
 
   /* ── Filter ── */
@@ -2382,6 +2453,7 @@ function readRenderYear(){
   var readBooks=books.filter(function(b){return b.status==='read';});
   var rc=readBooks.length,tot=books.length;
   var rp=readBooks.reduce(function(a,b){return a+b.pages;},0);
+  var readNow=books.reduce(function(a,b){return a+(+b.pagesRead||0);},0);
   var tp=books.reduce(function(a,b){return a+b.pages;},0);
   var bPct=tot>0?Math.round(rc/tot*100):0;
   var pPct=tp>0?Math.round(rp/tp*100):0;
@@ -2416,7 +2488,8 @@ function readRenderYear(){
     +(allRead?'':'<span class="rsbSub">de '+tp.toLocaleString('pt-BR')+'</span>')
     +'</div>'
     +(allRead?'':'<div class="rsbBar"><div class="rsbBarFill" style="width:'+pPct+'%"></div></div>'
-    +'<div class="rsbPct">'+pPct+'% das páginas</div>')
+    +'<div class="rsbPct">'+pPct+'% das páginas</div>'
+    +'<div class="rsbPct">Lidas até agora: '+readNow.toLocaleString('pt-BR')+'</div>')
     +'</div>';
   sh+='</div>';
   statsEl.innerHTML=sh;
@@ -2439,7 +2512,7 @@ function readBookHtml(b,key){
       :'<span style="font-size:28px">📖</span>')
     +'</div>';
 
-  if(READ_EDIT_MODE){
+  if(READ_EDIT_MODE && (!READ_EDIT_BOOK || READ_EDIT_BOOK===bid)){
     /* Edit mode card */
     return '<div class="bookItem bookItemEdit">'
       +coverHtml
@@ -2464,6 +2537,8 @@ function readBookHtml(b,key){
       +'<div class="bookEditInput" contenteditable="true" onblur="readEditField(\''+esc(key)+'\',\''+bid+'\',\'category\',this)">'+esc(b.category)+'</div></div>'
       +'<div class="bookEditField" style="width:70px"><span class="bookEditLbl">Páginas</span>'
       +'<input class="bookEditInput" type="number" value="'+b.pages+'" onchange="readEditField(\''+esc(key)+'\',\''+bid+'\',\'pages\',this)" style="width:100%"></div>'
+      +'<div class="bookEditField" style="width:80px"><span class="bookEditLbl">Lidas</span>'
+      +'<input class="bookEditInput" type="number" value="'+(b.pagesRead||0)+'" onchange="readEditField(\''+esc(key)+'\',\''+bid+'\',\'pagesRead\',this)" style="width:100%"></div>'
       +'<div class="bookEditField" style="width:100px"><span class="bookEditLbl">Status</span>'
       +'<select class="bookEditInput" onchange="readChangeStatus(\''+esc(key)+'\',\''+bid+'\',this.value)">'
       +'<option value="unread"'+(stc==='unread'?' selected':'')+'>Não lido</option>'
@@ -2481,15 +2556,19 @@ function readBookHtml(b,key){
   /* Normal card */
   var authorStr=b.author;
   var pagesStr=b.pages>0?' · '+b.pages.toLocaleString('pt-BR')+' pág.':'';
+  var readProgress=(b.pagesRead>0?(' · '+Math.min(b.pagesRead,b.pages).toLocaleString('pt-BR')+'/'+(b.pages||0).toLocaleString('pt-BR')+' lidas'):'');
   return '<div class="bookItem">'
     +coverHtml
     +'<div class="bookMeta">'
     +'<div class="bookMetaTop">'
     +'<div class="bookTitleRow">'
     +'<div class="bookTitle">'+esc(b.title)+'<span class="bookTitlePages">'+esc(pagesStr)+'</span></div>'
-    +'<span class="bookStatusBadge '+stc+'" onclick="readCycleStatus(\''+esc(key)+'\',\''+bid+'\')" style="cursor:pointer" title="Clique para alterar">'+esc(statusLabel[stc])+'</span>'
+    +'<div style="display:flex;align-items:center;gap:5px">'
+    +'<button class="bookInlineEditBtn" onclick="readEditSingle(\''+key+'\',\''+bid+'\')" title="Editar este livro">✎</button>'
+    +'<span class="bookStatusBadge '+stc+'" onclick="readCycleStatus(\''+key+'\',\''+bid+'\')" style="cursor:pointer" title="Clique para alterar">'+esc(statusLabel[stc])+'</span>'
     +'</div>'
-    +(authorStr?'<div class="bookAuthor">'+esc(authorStr)+'</div>':'')
+    +'</div>'
+    +(authorStr?'<div class="bookAuthor">'+esc(authorStr)+(readProgress?esc(readProgress):'')+'</div>':(readProgress?'<div class="bookAuthor">'+esc(readProgress)+'</div>':''))
     +(b.desc?'<div class="bookDesc">'+esc(b.desc)+'</div>':'')
     +'</div>'
     +'<div class="bookBottom">'
@@ -2676,6 +2755,7 @@ function renderPC(d){
 ════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded',function(){
   updateGreeting();
+  applyTheme((function(){try{return localStorage.getItem('home_theme')||'dark';}catch(e){return 'dark';}})());
   setInterval(updateGreeting,60000);
   pomoRender();
   loadPendNs('pessoal');
@@ -3063,6 +3143,7 @@ function htCardMetric(h, v, G) {
       + '<input class="hVooInputSm" type="number" min="0" max="24" step="0.5" value="'+(vd.horas||'')+'" placeholder="—" onchange="htSetVooField(\'horas\',this.value)"></div>'
       + '<div class="hVooRow"><span class="hVooLabelSm">Jornada</span>'
       + '<input class="hVooInputSm" type="number" min="0" max="24" step="0.5" value="'+(vd.jornada||'')+'" placeholder="—" onchange="htSetVooField(\'jornada\',this.value)"></div>'
+      + '<div class="hVooRow"><span class="hVooLabelSm">Equiv.</span><span class="hVooLabelSm">'+((+vd.horas||0)/24).toFixed(2).replace('.',',')+' dia(s)</span></div>'
       + '<div class="hBarThin"><div class="hBarThinFill" style="width:'+(vd.checked?100:0)+'%;background:'+color+'"></div></div>'
       + '</div>';
   }
